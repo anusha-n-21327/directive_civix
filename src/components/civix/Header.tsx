@@ -1,14 +1,11 @@
-import { Link } from "react-router-dom";
-
 const Header = () => {
   return (
-    <header className="bg-card shadow-sm p-4 flex items-center gap-4">
-      <Link to="/">
-        <img src="/civix-logo.jpeg" alt="Civix Logo" className="h-10 w-10 rounded-full" />
-      </Link>
-      <h1 className="text-4xl font-extrabold bg-gradient-to-r from-primary to-accent text-transparent bg-clip-text">
-        Civicx
-      </h1>
+    <header className="bg-card shadow-sm border-b">
+      <div className="container mx-auto py-4 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 via-teal-500 to-green-400 text-transparent bg-clip-text">
+          Civicx
+        </h1>
+      </div>
     </header>
   );
 };
