@@ -150,7 +150,11 @@ const IssueDetailPage = () => {
           <div className="p-4 bg-card border rounded-lg flex gap-4 items-center justify-center">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline" size="lg" className="flex-1">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="flex-1 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                >
                   <X className="mr-2 h-5 w-5" />
                   Reject
                 </Button>
