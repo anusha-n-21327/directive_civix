@@ -50,7 +50,7 @@ const IssueDetailPage = () => {
           <img
             src={issue.imageUrl}
             alt={issue.title}
-            className="w-full h-64 object-cover rounded-t-lg"
+            className="w-full h-64 md:h-96 object-cover rounded-t-lg"
           />
           <CardContent className="p-4">
             <h2 className="text-2xl font-bold mb-2">{issue.title}</h2>
@@ -82,7 +82,16 @@ const IssueDetailPage = () => {
               <div className="flex items-center gap-3">
                 <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span className="text-muted-foreground">Location:</span>
-                <span className="font-medium">{issue.location}</span>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    issue.location
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  {issue.location}
+                </a>
               </div>
               <div className="flex items-center gap-3">
                 <Tag className="h-4 w-4 text-muted-foreground" />
