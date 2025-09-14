@@ -1,10 +1,21 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { sampleIssues, handleAcknowledge, handleReject, handleImplement } from "@/data/issues";
+import { sampleIssues, handleAcknowledge, handleReject, handleImplement, Issue } from "@/data/issues";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench, CheckCircle, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const IssueDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +40,26 @@ const IssueDetailPage = () => {
       case "Medium": return "border-yellow-500/50 text-yellow-600 bg-yellow-500/10";
       case "Low": return "border-blue-500/50 text-blue-600 bg-blue-500/10";
       default: return "border-gray-500/50 text-gray-600 bg-gray-500/10";
+    }
+  };
+
+  const getStatusBadgeClass = (status: Issue["status"]) => {
+    switch (status) {
+      case "Resolved": return "bg-green-500 text-primary-foreground hover:bg-green-500/90";
+      case "In Progress": return "bg-yellow-500 text-primary-foreground hover:bg-yellow-500/90";
+      case "Pending": return "bg-blue-500 text-primary-foreground hover:bg-blue-500/90";
+      case "Rejected": return "bg-red-500 text-primary-foreground hover:bg-red-500/90";
+      default: return "bg-gray-500 text-primary-foreground hover:bg-gray-500/90";
+    }
+  };
+
+  const getStatusIcon = (status: Issue["status"]) => {
+    switch (status) {
+      case "Resolved": return <CheckCircle className="h-4 w-4 text-muted-foreground" />;
+      case "In Progress": return <Clock className="h-4 w-4 text-muted-foreground" />;
+      case "Pending": return <Clock className="h-4 w-4 text-muted-foreground" />;
+      case "Rejected": return <XCircle className="h-4 w-4 text-muted-foreground" />;
+      default: return null;
     }
   };
 
@@ -98,21 +129,41 @@ const IssueDetailPage = () => {
                 <span className="text-muted-foreground">Category:</span>
                 <span className="font-medium">{issue.category}</span>
               </div>
+              <div className="flex items-center gap-3">
+                {getStatusIcon(issue.status)}
+                <span className="text-muted-foreground">Status:</span>
+                <Badge className={getStatusBadgeClass(issue.status)}>
+                  {issue.status}
+                </Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
 
         {issue.status === "Pending" && (
           <div className="p-4 bg-card border rounded-lg flex gap-4 items-center justify-center">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => handleReject(issue.id)}
-              className="flex-1"
-            >
-              <X className="mr-2 h-5 w-5" />
-              Reject
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" size="lg" className="flex-1">
+                  <X className="mr-2 h-5 w-5" />
+                  Reject
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure you want to reject this issue?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will mark the issue as rejected and notify the citizen.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => handleReject(issue.id)}>
+                    Confirm Reject
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <Button
               size="lg"
               onClick={() => handleAcknowledge(issue.id)}

@@ -123,18 +123,18 @@ export const sampleIssues: Issue[] = [
 
 export const handleAcknowledge = (issueId: string) => {
   console.log(`Issue ${issueId} acknowledged!`);
-  showSuccess(`Issue ${issueId} acknowledged! Status would be 'In Progress'.`);
+  showSuccess(`Issue ${issueId} acknowledged. Status is now 'In Progress'.`);
   // In a real app, you'd update the issue status in your state/backend
 };
 
 export const handleReject = (issueId: string) => {
   console.log(`Issue ${issueId} rejected.`);
-  showError(`Issue ${issueId} has been rejected.`);
+  showError(`Issue ${issueId} rejected. A notification has been sent to the citizen.`);
   // In a real app, you'd update the issue status in your state/backend
 };
 
 export const handleImplement = (issueId: string) => {
   console.log(`Starting implementation for issue ${issueId}!`);
-  showSuccess(`Implementation started for issue ${issueId}!`);
+  showSuccess(`Implementation started for issue ${issueId}. Status would eventually be 'Resolved'.`);
   // In a real app, you'd update the issue status in your state/backend
 };
