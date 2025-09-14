@@ -29,20 +29,21 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-2 border-t border-gray-200 flex justify-around items-center z-50">
+    <footer className="fixed bottom-0 left-0 right-0 bg-card shadow-lg p-2 border-t flex justify-around items-center z-50">
       {navItems.map((item) => {
+        const active = isActive(item.href);
         if (item.isDropdown) {
           return (
             <DropdownMenu key={item.href}>
               <DropdownMenuTrigger asChild>
                 <div className={cn(
                   "flex flex-col items-center transition-colors duration-200 w-1/5 cursor-pointer",
-                  isActive(item.href) ? "text-purple-600" : "text-gray-600 hover:text-purple-600"
+                  active ? "text-primary" : "text-muted-foreground hover:text-primary"
                 )}>
                   <Button variant="ghost" size="icon" className="h-10 w-10">
                     <item.icon className="h-6 w-6" />
                   </Button>
-                  <span className="text-xs mt-1">{item.label}</span>
+                  <span className={cn("text-xs mt-1", active && "font-semibold")}>{item.label}</span>
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mb-2" side="top" align="center">
@@ -61,15 +62,13 @@ const Footer = () => {
             to={item.href}
             className={cn(
               "flex flex-col items-center transition-colors duration-200 w-1/5",
-              isActive(item.href)
-                ? "text-purple-600"
-                : "text-gray-600 hover:text-purple-600"
+              active ? "text-primary" : "text-muted-foreground hover:text-primary"
             )}
           >
             <Button variant="ghost" size="icon" className="h-10 w-10">
               <item.icon className="h-6 w-6" />
             </Button>
-            <span className="text-xs mt-1">{item.label}</span>
+            <span className={cn("text-xs mt-1", active && "font-semibold")}>{item.label}</span>
           </Link>
         );
       })}

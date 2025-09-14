@@ -4,10 +4,10 @@ import Header from "./Header";
 
 const Layout = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <div className="container mx-auto bg-white rounded-lg shadow-md flex-grow flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="container mx-auto flex-grow flex flex-col">
         <Header />
-        <div className="flex-grow overflow-y-auto">
+        <div className="flex-grow">
           <Outlet />
         </div>
       </div>

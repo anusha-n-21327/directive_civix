@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, AlertCircle, MoreVertical } from "lucide-react";
+import { MapPin, Clock, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { sampleIssues } from "@/data/issues";
@@ -17,7 +17,7 @@ type IssueStatusFilter = "Pending" | "In Progress";
 const Index = () => {
   const [statusFilter, setStatusFilter] = useState<IssueStatusFilter>("Pending");
 
-  const priorityOrder = { "High": 1, "Medium": 2, "Low": 3 };
+  const priorityOrder = { High: 1, Medium: 2, Low: 3 };
 
   const activeIssues = sampleIssues
     .filter((issue) => issue.status === statusFilter)
@@ -26,29 +26,29 @@ const Index = () => {
   const getPriorityBadgeClass = (priority: "High" | "Medium" | "Low") => {
     switch (priority) {
       case "High":
-        return "bg-red-600";
+        return "border-red-500/50 text-red-600 bg-red-500/10";
       case "Medium":
-        return "bg-yellow-500";
+        return "border-yellow-500/50 text-yellow-600 bg-yellow-500/10";
       case "Low":
-        return "bg-blue-500";
+        return "border-blue-500/50 text-blue-600 bg-blue-500/10";
       default:
-        return "bg-gray-500";
+        return "border-gray-500/50 text-gray-600 bg-gray-500/10";
     }
   };
 
   return (
     <>
       <main className="px-6 pb-6 space-y-6 animate-in fade-in duration-500">
-        {/* Greeting */}
-        <section className="text-center pt-6">
-          <h1 className="text-3xl font-bold text-gray-800">Hello Sir,</h1>
-          <p className="text-gray-500 mt-1">Let's make our city better!</p>
+        <section className="text-left py-6">
+          <h1 className="text-3xl font-bold text-foreground">Hello Sir,</h1>
+          <p className="text-muted-foreground mt-1">
+            Here are the latest issues reported. Let's make our city better!
+          </p>
         </section>
 
-        {/* Issues Display Section */}
         <section className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-2xl font-bold text-foreground">
               {statusFilter === "Pending" ? "Pending Issues" : "Acknowledged Issues"}
             </h2>
             <DropdownMenu>
@@ -68,48 +68,38 @@ const Index = () => {
             </DropdownMenu>
           </div>
           {activeIssues.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {activeIssues.map((issue) => (
                 <Card
                   key={issue.id}
-                  className="shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col"
+                  className="bg-card shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col border rounded-lg overflow-hidden"
                 >
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <AlertCircle className="h-5 w-5 text-red-500" />
+                  <CardHeader className="p-4 border-b">
+                    <CardTitle className="text-lg font-semibold text-foreground">
                       {issue.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 text-sm text-gray-600 flex-grow">
+                  <CardContent className="p-4 space-y-3 text-sm text-muted-foreground flex-grow">
                     <p>{issue.description}</p>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-500" />
+                    <div className="flex items-center gap-2 pt-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground/80" />
                       <span>{issue.location}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-gray-500" />
-                      <span>Reported: {new Date(issue.reportedAt).toLocaleDateString()}</span>
+                      <Clock className="h-4 w-4 text-muted-foreground/80" />
+                      <span>
+                        Reported: {new Date(issue.reportedAt).toLocaleDateString()}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge className={`${getPriorityBadgeClass(issue.priority)} text-white`}>
+                    <div className="flex items-center gap-2 pt-2">
+                      <Badge variant="outline" className={getPriorityBadgeClass(issue.priority)}>
                         {issue.priority} Priority
-                      </Badge>
-                      <Badge
-                        className={`${
-                          issue.status === "Resolved"
-                            ? "bg-green-500"
-                            : issue.status === "In Progress"
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
-                        } text-white`}
-                      >
-                        {issue.status}
                       </Badge>
                     </div>
                   </CardContent>
-                  <div className="flex gap-2 mt-4 p-4 pt-2 border-t border-gray-100">
+                  <div className="p-4 bg-secondary/50 flex gap-2 items-center justify-end">
                     <Button
-                      variant="outline"
+                      variant="secondary"
                       size="sm"
                       onClick={() => handleAccept(issue.id)}
                       className="flex-1"
@@ -119,7 +109,7 @@ const Index = () => {
                     <Button
                       size="sm"
                       onClick={() => handleImplement(issue.id)}
-                      className="flex-1"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                       Implement
                     </Button>
@@ -128,13 +118,12 @@ const Index = () => {
               ))}
             </div>
           ) : (
-            <p className="text-center text-gray-500 text-lg py-8">
+            <p className="text-center text-muted-foreground text-lg py-8">
               No {statusFilter.toLowerCase()} issues to display.
             </p>
           )}
         </section>
 
-        {/* Add padding for mobile footer */}
         <div className="pb-20 md:pb-0"></div>
       </main>
     </>
