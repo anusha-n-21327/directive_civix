@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, ClipboardList, MessageSquare, User } from "lucide-react";
+import { Home, ClipboardList, MessageSquare, User, Archive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -16,6 +16,7 @@ const Footer = () => {
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
     { href: "/issues", icon: ClipboardList, label: "Issues", isDropdown: true },
+    { href: "/records", icon: Archive, label: "Records" },
     { href: "/achievements", icon: MessageSquare, label: "Feedback" },
     { href: "/profile", icon: User, label: "Profile" },
   ];
@@ -35,7 +36,7 @@ const Footer = () => {
             <DropdownMenu key={item.href}>
               <DropdownMenuTrigger asChild>
                 <div className={cn(
-                  "flex flex-col items-center transition-colors duration-200 w-1/4 cursor-pointer",
+                  "flex flex-col items-center transition-colors duration-200 w-1/5 cursor-pointer",
                   isActive(item.href) ? "text-purple-600" : "text-gray-600 hover:text-purple-600"
                 )}>
                   <Button variant="ghost" size="icon" className="h-10 w-10">
@@ -59,7 +60,7 @@ const Footer = () => {
             key={item.href}
             to={item.href}
             className={cn(
-              "flex flex-col items-center transition-colors duration-200 w-1/4",
+              "flex flex-col items-center transition-colors duration-200 w-1/5",
               isActive(item.href)
                 ? "text-purple-600"
                 : "text-gray-600 hover:text-purple-600"

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Header from "@/components/civix/Header";
 import { MapPin, Clock, AlertCircle, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,10 +38,9 @@ const Index = () => {
 
   return (
     <>
-      <Header />
-      <main className="p-6 space-y-6 animate-in fade-in duration-500">
+      <main className="px-6 pb-6 space-y-6 animate-in fade-in duration-500">
         {/* Greeting */}
-        <section className="text-center mb-6">
+        <section className="text-center pt-6">
           <h1 className="text-3xl font-bold text-gray-800">Hello Sir,</h1>
           <p className="text-gray-500 mt-1">Let's make our city better!</p>
         </section>
