@@ -2,6 +2,7 @@ import { showSuccess, showError } from "@/utils/toast";
 
 export interface Issue {
   id: string;
+  citizenId: string;
   title: string;
   description: string;
   location: string;
@@ -17,6 +18,7 @@ export interface Issue {
 export const sampleIssues: Issue[] = [
   {
     id: "1",
+    citizenId: "CZ-84265",
     title: "Large Pothole on Main Street",
     description: "There's a very large pothole near the intersection of Main St and Oak Ave, causing traffic hazards.",
     location: "Main St, near Oak Ave",
@@ -30,6 +32,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "2",
+    citizenId: "CZ-19374",
     title: "Broken Street Light",
     description: "Street light outside 123 Elm Street is not working, making the area dark at night.",
     location: "123 Elm St",
@@ -43,6 +46,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "3",
+    citizenId: "CZ-50281",
     title: "Garbage Pile Up",
     description: "Illegal dumping has created a large pile of garbage behind the park.",
     location: "Behind Central Park",
@@ -56,6 +60,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "4",
+    citizenId: "CZ-98765",
     title: "Damaged Public Bench",
     description: "A public bench in the town square has been broken and is unsafe to use.",
     location: "Town Square",
@@ -69,6 +74,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "5",
+    citizenId: "CZ-12345",
     title: "Water Leak in Sector 7",
     description: "A significant water leak has been reported near the community center in Sector 7.",
     location: "Sector 7 Community Center",
@@ -82,6 +88,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "6",
+    citizenId: "CZ-67890",
     title: "Graffiti on Underpass Wall",
     description: "Extensive graffiti found on the walls of the underpass near the railway station.",
     location: "Railway Station Underpass",
@@ -95,6 +102,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "7",
+    citizenId: "CZ-24680",
     title: "Blocked Drainage System",
     description: "Drainage system blocked near the market area causing water logging during rain.",
     location: "Market Area",
@@ -108,6 +116,7 @@ export const sampleIssues: Issue[] = [
   },
   {
     id: "8",
+    citizenId: "CZ-13579",
     title: "Missing Road Sign",
     description: "A crucial road sign indicating a sharp turn is missing on Highway 45.",
     location: "Highway 45, near bridge",

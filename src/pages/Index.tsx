@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Menu } from "lucide-react";
+import { MapPin, Clock, Menu, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { sampleIssues } from "@/data/issues";
@@ -82,6 +82,10 @@ const Index = () => {
                     <CardContent className="p-4 space-y-3 text-sm text-muted-foreground flex-grow">
                       <p className="line-clamp-2">{issue.description}</p>
                       <div className="flex items-center gap-2 pt-2">
+                        <User className="h-4 w-4 text-muted-foreground/80" />
+                        <span className="truncate">{issue.citizenName} ({issue.citizenId})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-muted-foreground/80" />
                         <span className="truncate">{issue.location}</span>
                       </div>

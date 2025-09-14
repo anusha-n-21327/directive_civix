@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { sampleIssues, handleAcknowledge, handleReject, handleImplement, Issue } from "@/data/issues";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench, CheckCircle, XCircle, Fingerprint } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -16,6 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Footer from "@/components/civix/Footer";
 
 const IssueDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -106,6 +107,11 @@ const IssueDetailPage = () => {
                 <span className="font-medium">{issue.citizenName}</span>
               </div>
               <div className="flex items-center gap-3">
+                <Fingerprint className="h-4 w-4 text-muted-foreground" />
+                <span className="text-muted-foreground">Citizen ID:</span>
+                <span className="font-medium">{issue.citizenId}</span>
+              </div>
+              <div className="flex items-center gap-3">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <span className="text-muted-foreground">Date & Time:</span>
                 <span className="font-medium">{formattedDate}</span>
@@ -189,6 +195,7 @@ const IssueDetailPage = () => {
         )}
         <div className="pb-20 md:pb-0" />
       </main>
+      <Footer />
     </>
   );
 };

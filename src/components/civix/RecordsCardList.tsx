@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Issue } from "@/data/issues";
 import { cn } from "@/lib/utils";
-import { MapPin, Tag, User, CheckCircle, Clock, XCircle } from "lucide-react";
+import { MapPin, Tag, User, CheckCircle, Clock, XCircle, Fingerprint } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface RecordsCardListProps {
@@ -65,6 +65,10 @@ const RecordsCardList = ({ issues }: RecordsCardListProps) => {
                 <p className="flex items-center gap-2">
                   <User className="h-4 w-4 text-gray-500" />
                   <span>{issue.citizenName}</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <Fingerprint className="h-4 w-4 text-gray-500" />
+                  <span>{issue.citizenId}</span>
                 </p>
                 <p className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-gray-500" />
