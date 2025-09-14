@@ -136,9 +136,9 @@ export const handleAcknowledge = (issueId: string) => {
   // In a real app, you'd update the issue status in your state/backend
 };
 
-export const handleReject = (issueId: string) => {
-  console.log(`Issue ${issueId} rejected.`);
-  showError(`Issue ${issueId} rejected. A notification has been sent to the citizen.`);
+export const handleReject = (issueId: string, reason: string) => {
+  console.log(`Issue ${issueId} rejected. Reason: ${reason}`);
+  showError(`Issue ${issueId} rejected. Reason: "${reason}". A notification has been sent to the citizen.`);
   // In a real app, you'd update the issue status in your state/backend
 };
 

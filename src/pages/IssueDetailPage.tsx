@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { sampleIssues, handleAcknowledge, handleReject, handleImplement, Issue } from "@/data/issues";
 import { Button } from "@/components/ui/button";
@@ -17,11 +18,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Footer from "@/components/civix/Footer";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const IssueDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const issue = sampleIssues.find((i) => i.id === id);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   if (!issue) {
     return (
@@ -163,12 +167,27 @@ const IssueDetailPage = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure you want to reject this issue?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will mark the issue as rejected and notify the citizen.
+                    Please provide a reason for rejecting this issue. This reason will be sent to the citizen.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
+                <div className="grid gap-2">
+                  <Label htmlFor="rejection-reason">Reason</Label>
+                  <Textarea
+                    id="rejection-reason"
+                    placeholder="Type your reason here."
+                    value={rejectionReason}
+                    onChange={(e) => setRejectionReason(e.target.value)}
+                  />
+                </div>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleReject(issue.id)}>
+                  <AlertDialogCancel onClick={() => setRejectionReason("")}>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      handleReject(issue.id, rejectionReason);
+                      setRejectionReason("");
+                    }}
+                    disabled={!rejectionReason.trim()}
+                  >
                     Confirm Reject
                   </AlertDialogAction>
                 </AlertDialogFooter>
