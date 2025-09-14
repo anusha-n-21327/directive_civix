@@ -1,4 +1,4 @@
-import { showSuccess } from "@/utils/toast";
+import { showSuccess, showError } from "@/utils/toast";
 
 export interface Issue {
   id: string;
@@ -121,14 +121,20 @@ export const sampleIssues: Issue[] = [
   },
 ];
 
-export const handleAccept = (issueId: string) => {
-  console.log(`Issue ${issueId} accepted!`);
-  showSuccess(`Issue ${issueId} accepted!`);
+export const handleAcknowledge = (issueId: string) => {
+  console.log(`Issue ${issueId} acknowledged!`);
+  showSuccess(`Issue ${issueId} acknowledged! Status would be 'In Progress'.`);
+  // In a real app, you'd update the issue status in your state/backend
+};
+
+export const handleReject = (issueId: string) => {
+  console.log(`Issue ${issueId} rejected.`);
+  showError(`Issue ${issueId} has been rejected.`);
   // In a real app, you'd update the issue status in your state/backend
 };
 
 export const handleImplement = (issueId: string) => {
   console.log(`Starting implementation for issue ${issueId}!`);
-  showSuccess(`Starting implementation for issue ${issueId}!`);
+  showSuccess(`Implementation started for issue ${issueId}!`);
   // In a real app, you'd update the issue status in your state/backend
 };

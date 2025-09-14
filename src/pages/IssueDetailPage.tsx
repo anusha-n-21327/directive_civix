@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { sampleIssues, handleAccept, handleImplement } from "@/data/issues";
+import { sampleIssues, handleAcknowledge, handleReject, handleImplement } from "@/data/issues";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -102,21 +102,36 @@ const IssueDetailPage = () => {
           </CardContent>
         </Card>
 
-        {issue.status !== "Resolved" && issue.status !== "Rejected" && (
+        {issue.status === "Pending" && (
           <div className="p-4 bg-card border rounded-lg flex gap-4 items-center justify-center">
             <Button
-              variant="secondary"
+              variant="outline"
               size="lg"
-              onClick={() => handleAccept(issue.id)}
+              onClick={() => handleReject(issue.id)}
               className="flex-1"
             >
-              Accept
+              <X className="mr-2 h-5 w-5" />
+              Reject
             </Button>
+            <Button
+              size="lg"
+              onClick={() => handleAcknowledge(issue.id)}
+              className="flex-1"
+            >
+              <Check className="mr-2 h-5 w-5" />
+              Acknowledge
+            </Button>
+          </div>
+        )}
+
+        {issue.status === "In Progress" && (
+          <div className="p-4 bg-card border rounded-lg flex gap-4 items-center justify-center">
             <Button
               size="lg"
               onClick={() => handleImplement(issue.id)}
               className="flex-1"
             >
+              <Wrench className="mr-2 h-5 w-5" />
               Implement
             </Button>
           </div>
