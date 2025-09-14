@@ -11,6 +11,7 @@ export interface Issue {
   citizenName: string; // New field
   issueArea: string; // New field
   category: string; // New field
+  imageUrl: string;
 }
 
 export const sampleIssues: Issue[] = [
@@ -25,6 +26,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Priya Sharma",
     issueArea: "Roads",
     category: "Infrastructure",
+    imageUrl: "https://picsum.photos/seed/pothole/800/600",
   },
   {
     id: "2",
@@ -37,6 +39,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Rahul Verma",
     issueArea: "Lighting",
     category: "Public Amenities",
+    imageUrl: "https://picsum.photos/seed/streetlight/800/600",
   },
   {
     id: "3",
@@ -49,6 +52,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Sneha Reddy",
     issueArea: "Waste Management",
     category: "Sanitation",
+    imageUrl: "https://picsum.photos/seed/garbage/800/600",
   },
   {
     id: "4",
@@ -61,6 +65,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Amit Kumar",
     issueArea: "Parks & Recreation",
     category: "Public Amenities",
+    imageUrl: "https://picsum.photos/seed/bench/800/600",
   },
   {
     id: "5",
@@ -73,6 +78,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Deepika Singh",
     issueArea: "Water Supply",
     category: "Infrastructure",
+    imageUrl: "https://picsum.photos/seed/waterleak/800/600",
   },
   {
     id: "6",
@@ -85,6 +91,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Arjun Das",
     issueArea: "Public Spaces",
     category: "Vandalism",
+    imageUrl: "https://picsum.photos/seed/graffiti/800/600",
   },
   {
     id: "7",
@@ -97,6 +104,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Kavita Rao",
     issueArea: "Drainage",
     category: "Infrastructure",
+    imageUrl: "https://picsum.photos/seed/drainage/800/600",
   },
   {
     id: "8",
@@ -109,6 +117,7 @@ export const sampleIssues: Issue[] = [
     citizenName: "Rajesh Kumar",
     issueArea: "Road Safety",
     category: "Infrastructure",
+    imageUrl: "https://picsum.photos/seed/roadsign/800/600",
   },
 ];
 

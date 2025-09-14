@@ -20,6 +20,7 @@ import SolvedIssuesPage from "./pages/SolvedIssuesPage";
 import { UserProvider } from "./context/UserContext";
 import Layout from "./components/civix/Layout";
 import IssuesPage from "./pages/IssuesPage";
+import IssueDetailPage from "./pages/IssueDetailPage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,8 @@ const App = () => (
               <Route path="/civix-heroes" element={<CivixHeroesPage />} />
               <Route path="/solved-issues" element={<SolvedIssuesPage />} />
             </Route>
+            {/* Standalone route for detail page without the main layout's header/footer */}
+            <Route path="/issue/:id" element={<IssueDetailPage />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

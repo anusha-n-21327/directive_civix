@@ -9,12 +9,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Issue } from "@/data/issues";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 interface RecordsTableProps {
   issues: Issue[];
 }
 
 const RecordsTable = ({ issues }: RecordsTableProps) => {
+  const navigate = useNavigate();
+
   const getStatusBadgeClass = (status: Issue["status"]) => {
     switch (status) {
       case "Resolved":
@@ -50,7 +53,11 @@ const RecordsTable = ({ issues }: RecordsTableProps) => {
         <TableBody>
           {issues.length > 0 ? (
             issues.map((issue) => (
-              <TableRow key={issue.id}>
+              <TableRow
+                key={issue.id}
+                onClick={() => navigate(`/issue/${issue.id}`)}
+                className="cursor-pointer hover:bg-muted/50"
+              >
                 <TableCell className="font-medium">{issue.id}</TableCell>
                 <TableCell>{issue.citizenName}</TableCell>
                 <TableCell>{issue.issueArea}</TableCell>
