@@ -1,16 +1,27 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/civix/Header";
-import { MapPin, Clock, AlertCircle } from "lucide-react";
+import { MapPin, Clock, AlertCircle, MoreVertical } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { sampleIssues, handleAccept, handleImplement } from "@/data/issues";
+import { sampleIssues } from "@/data/issues";
+import { handleAccept, handleImplement } from "@/data/issues";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+type IssueStatusFilter = "Pending" | "In Progress";
 
 const Index = () => {
+  const [statusFilter, setStatusFilter] = useState<IssueStatusFilter>("Pending");
+
   const priorityOrder = { "High": 1, "Medium": 2, "Low": 3 };
 
   const activeIssues = sampleIssues
-    .filter((issue) => issue.status === "Pending" || issue.status === "In Progress")
+    .filter((issue) => issue.status === statusFilter)
     .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
   const getPriorityBadgeClass = (priority: "High" | "Medium" | "Low") => {
@@ -38,7 +49,26 @@ const Index = () => {
 
         {/* Issues Display Section */}
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-800">Important Issues</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-gray-800">
+              {statusFilter === "Pending" ? "Pending Issues" : "Acknowledged Issues"}
+            </h2>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setStatusFilter("Pending")}>
+                  Pending
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setStatusFilter("In Progress")}>
+                  Acknowledged
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           {activeIssues.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {activeIssues.map((issue) => (
@@ -101,7 +131,7 @@ const Index = () => {
             </div>
           ) : (
             <p className="text-center text-gray-500 text-lg py-8">
-              No active issues to display. Great job!
+              No {statusFilter.toLowerCase()} issues to display.
             </p>
           )}
         </section>

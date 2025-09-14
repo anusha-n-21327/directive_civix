@@ -19,6 +19,7 @@ import CivixHeroesPage from "./pages/CivixHeroesPage";
 import SolvedIssuesPage from "./pages/SolvedIssuesPage";
 import { UserProvider } from "./context/UserContext";
 import Layout from "./components/civix/Layout";
+import IssuesPage from "./pages/IssuesPage";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="/reporters" element={<ReportersPage />} />
               <Route path="/records" element={<RecordsPage />} />
+              <Route path="/issues" element={<IssuesPage />} />
               <Route path="/achievements" element={<AchievementsPage />} />
               <Route path="/civix-heroes" element={<CivixHeroesPage />} />
               <Route path="/solved-issues" element={<SolvedIssuesPage />} />

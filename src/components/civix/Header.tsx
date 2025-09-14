@@ -1,7 +1,9 @@
 const Header = () => {
   return (
-    <header className="bg-white shadow-md p-2 flex justify-between items-center">
-      <h1 className="text-xl font-bold text-gray-800 pl-4">Civicx</h1>
+    <header className="bg-white shadow-md py-3 px-4 flex justify-between items-center">
+      <h1 className="text-3xl font-extrabold bg-gradient-to-r from-purple-600 to-blue-500 text-transparent bg-clip-text">
+        Civicx
+      </h1>
     </header>
   );
 };
