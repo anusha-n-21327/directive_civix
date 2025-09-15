@@ -1,15 +1,29 @@
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Star } from "lucide-react";
+import { ArrowLeft, Star, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 interface Feedback {
   id: string;
   citizenName: string;
   rating: number;
   comment: string;
-  date: string;
+  date: string; // "YYYY-MM-DD"
+  area: string;
+  issueType: string;
 }
 
 const sampleFeedback: Feedback[] = [
@@ -19,6 +33,8 @@ const sampleFeedback: Feedback[] = [
     rating: 5,
     comment: "Excellent work on the pothole repair! The road is much smoother now. Thank you!",
     date: "2023-10-28",
+    area: "Roads",
+    issueType: "Infrastructure",
   },
   {
     id: "2",
@@ -26,24 +42,79 @@ const sampleFeedback: Feedback[] = [
     rating: 4,
     comment: "The street light was fixed quickly. Appreciate the prompt response.",
     date: "2023-10-27",
+    area: "Lighting",
+    issueType: "Public Amenities",
   },
   {
     id: "3",
     citizenName: "Sneha Reddy",
     rating: 5,
     comment: "Very impressed with the cleanliness drive. Our neighborhood looks much better.",
-    date: "2023-10-26",
+    date: "2023-09-15",
+    area: "Waste Management",
+    issueType: "Sanitation",
   },
   {
     id: "4",
     citizenName: "Amit Kumar",
     rating: 3,
     comment: "The issue was resolved, but it took a bit longer than expected.",
-    date: "2023-10-25",
+    date: "2022-10-25",
+    area: "Parks & Recreation",
+    issueType: "Maintenance",
   },
 ];
 
 const AchievementsPage = () => {
+  const [filters, setFilters] = useState({
+    year: "All",
+    month: "All",
+    area: "All",
+    issueType: "All",
+  });
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  const uniqueYears = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => new Date(f.date).getFullYear().toString()))).sort((a, b) => b.localeCompare(a))], []);
+  const uniqueMonths = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => monthNames[new Date(f.date).getMonth()]))).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b))], [monthNames]);
+  const uniqueAreas = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.area))).sort()], []);
+  const uniqueIssueTypes = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.issueType))).sort()], []);
+
+  const filteredFeedback = useMemo(() => {
+    return sampleFeedback
+      .filter(f => {
+        const date = new Date(f.date);
+        const year = date.getFullYear().toString();
+        const month = monthNames[date.getMonth()];
+
+        const yearMatch = filters.year === "All" || filters.year === year;
+        const monthMatch = filters.month === "All" || filters.month === month;
+        const areaMatch = filters.area === "All" || filters.area === f.area;
+        const issueTypeMatch = filters.issueType === "All" || filters.issueType === f.issueType;
+
+        return yearMatch && monthMatch && areaMatch && issueTypeMatch;
+      })
+      .sort((a, b) => b.rating - a.rating);
+  }, [filters, monthNames]);
+
+  const handleFilterChange = (type: keyof typeof filters, value: string) => {
+    setFilters(prev => ({ ...prev, [type]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      year: "All",
+      month: "All",
+      area: "All",
+      issueType: "All",
+    });
+  };
+
+  const activeFilters = Object.entries(filters).filter(([, value]) => value !== "All");
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -54,40 +125,109 @@ const AchievementsPage = () => {
     ));
   };
 
-  const sortedFeedback = [...sampleFeedback].sort((a, b) => b.rating - a.rating);
-
   return (
     <>
-      <header className="flex items-center p-4 border-b">
-        <Link to="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-6 w-6" />
-          </Button>
-        </Link>
-        <h1 className="text-xl font-bold ml-2">Feedback</h1>
+      <header className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center">
+          <Link to="/">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
+          </Link>
+          <h1 className="text-xl font-bold ml-2">Feedback</h1>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <Menu className="h-6 w-6" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Year</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                {uniqueYears.map(year => (
+                  <DropdownMenuItem key={year} onSelect={() => handleFilterChange("year", year)}>
+                    {year}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Month</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                {uniqueMonths.map(month => (
+                  <DropdownMenuItem key={month} onSelect={() => handleFilterChange("month", month)}>
+                    {month}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Area</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                {uniqueAreas.map(area => (
+                  <DropdownMenuItem key={area} onSelect={() => handleFilterChange("area", area)}>
+                    {area}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Issue Type</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                {uniqueIssueTypes.map(type => (
+                  <DropdownMenuItem key={type} onSelect={() => handleFilterChange("issueType", type)}>
+                    {type}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={clearFilters} className="text-red-600">
+              Clear All Filters
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </header>
       <main className="p-6 space-y-4">
-        {sortedFeedback.map((feedback) => (
-          <Card key={feedback.id} className="shadow-sm">
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback>{feedback.citizenName.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-semibold text-base">{feedback.citizenName}</h3>
-                    <div className="flex items-center mt-0.5">
-                      {renderStars(feedback.rating)}
+        {activeFilters.length > 0 && (
+          <div className="flex flex-wrap gap-2 items-center mb-4">
+            <span className="text-sm font-semibold">Filters:</span>
+            {activeFilters.map(([key, value]) => (
+              <Badge key={key} variant="secondary" className="capitalize">
+                {key.replace('issueType', 'Type')}: {value}
+              </Badge>
+            ))}
+          </div>
+        )}
+        {filteredFeedback.length > 0 ? (
+          filteredFeedback.map((feedback) => (
+            <Card key={feedback.id} className="shadow-sm">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback>{feedback.citizenName.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-semibold text-base">{feedback.citizenName}</h3>
+                      <div className="flex items-center mt-0.5">
+                        {renderStars(feedback.rating)}
+                      </div>
                     </div>
                   </div>
+                  <span className="text-sm text-gray-500">{feedback.date}</span>
                 </div>
-                <span className="text-sm text-gray-500">{feedback.date}</span>
-              </div>
-              <p className="text-gray-700 text-sm">{feedback.comment}</p>
-            </CardContent>
-          </Card>
-        ))}
+                <p className="text-gray-700 text-sm">{feedback.comment}</p>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-muted-foreground">No feedback found matching your criteria.</p>
+          </div>
+        )}
         <div className="pb-20 md:pb-0" />
       </main>
     </>
