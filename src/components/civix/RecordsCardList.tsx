@@ -1,17 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Issue, handleAcknowledge } from "@/data/issues";
+import { Issue } from "@/data/issues";
 import { cn } from "@/lib/utils";
 import { MapPin, Tag, User, CheckCircle, Clock, XCircle, Fingerprint, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import RejectIssueDialog from "./RejectIssueDialog";
+import { useIssues } from "@/context/IssuesContext";
 
 interface RecordsCardListProps {
   issues: Issue[];
 }
 
 const RecordsCardList = ({ issues }: RecordsCardListProps) => {
+  const { acknowledgeIssue } = useIssues();
+
   const getStatusBadgeClass = (status: Issue["status"]) => {
     switch (status) {
       case "Resolved":
@@ -90,7 +93,7 @@ const RecordsCardList = ({ issues }: RecordsCardListProps) => {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      handleAcknowledge(issue.id);
+                      acknowledgeIssue(issue.id);
                     }}
                     className="flex-1"
                   >
