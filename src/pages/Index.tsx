@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Menu, User } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MapPin, Clock, Menu, User, Check } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { sampleIssues } from "@/data/issues";
+import { sampleIssues, handleAcknowledge } from "@/data/issues";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import RejectIssueDialog from "@/components/civix/RejectIssueDialog";
 
 type IssueStatusFilter = "Pending" | "In Progress";
 
@@ -101,6 +102,23 @@ const Index = () => {
                         </Badge>
                       </div>
                     </CardContent>
+                    {statusFilter === "Pending" && (
+                      <CardFooter className="p-4 border-t flex gap-2">
+                        <RejectIssueDialog issueId={issue.id} />
+                        <Button
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAcknowledge(issue.id);
+                          }}
+                          className="flex-1"
+                        >
+                          <Check className="mr-2 h-4 w-4" />
+                          Acknowledge
+                        </Button>
+                      </CardFooter>
+                    )}
                   </Card>
                 </Link>
               ))}

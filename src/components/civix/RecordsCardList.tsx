@@ -1,9 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Issue } from "@/data/issues";
+import { Issue, handleAcknowledge } from "@/data/issues";
 import { cn } from "@/lib/utils";
-import { MapPin, Tag, User, CheckCircle, Clock, XCircle, Fingerprint } from "lucide-react";
+import { MapPin, Tag, User, CheckCircle, Clock, XCircle, Fingerprint, Check } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import RejectIssueDialog from "./RejectIssueDialog";
 
 interface RecordsCardListProps {
   issues: Issue[];
@@ -80,6 +82,23 @@ const RecordsCardList = ({ issues }: RecordsCardListProps) => {
                 </p>
                 <p className="text-xs text-gray-500 mt-2">Reported: {new Date(issue.reportedAt).toLocaleDateString()}</p>
               </CardContent>
+              {issue.status === "Pending" && (
+                <CardFooter className="p-4 border-t flex gap-2">
+                  <RejectIssueDialog issueId={issue.id} />
+                  <Button
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleAcknowledge(issue.id);
+                    }}
+                    className="flex-1"
+                  >
+                    <Check className="mr-2 h-4 w-4" />
+                    Acknowledge
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
           </Link>
         ))
