@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { handleReject } from "@/data/issues";
+import { useIssues } from "@/context/IssuesContext";
 import { X } from "lucide-react";
 
 interface RejectIssueDialogProps {
@@ -22,11 +22,12 @@ interface RejectIssueDialogProps {
 
 const RejectIssueDialog = ({ issueId }: RejectIssueDialogProps) => {
   const [rejectionReason, setRejectionReason] = useState("");
+  const { rejectIssue } = useIssues();
 
   const onReject = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    handleReject(issueId, rejectionReason);
+    rejectIssue(issueId, rejectionReason);
     setRejectionReason("");
   };
 

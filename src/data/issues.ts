@@ -1,18 +1,17 @@
-import { showSuccess, showError } from "@/utils/toast";
-
 export interface Issue {
   id: string;
   citizenId: string;
   title: string;
   description: string;
   location: string;
-  status: "Pending" | "In Progress" | "Resolved" | "Rejected"; // Added Rejected
+  status: "Pending" | "In Progress" | "Resolved" | "Rejected";
   reportedAt: string;
   priority: "High" | "Medium" | "Low";
-  citizenName: string; // New field
-  issueArea: string; // New field
-  category: string; // New field
+  citizenName: string;
+  issueArea: string;
+  category: string;
   imageUrl: string;
+  rejectionReason?: string;
 }
 
 export const sampleIssues: Issue[] = [
@@ -22,7 +21,7 @@ export const sampleIssues: Issue[] = [
     title: "Large Pothole on Main Street",
     description: "There's a very large pothole near the intersection of Main St and Oak Ave, causing traffic hazards.",
     location: "Main St, near Oak Ave",
-    status: "Resolved", // Changed to Resolved for example
+    status: "Resolved",
     reportedAt: "2023-10-26T10:00:00Z",
     priority: "High",
     citizenName: "Priya Sharma",
@@ -64,7 +63,8 @@ export const sampleIssues: Issue[] = [
     title: "Damaged Public Bench",
     description: "A public bench in the town square has been broken and is unsafe to use.",
     location: "Town Square",
-    status: "Rejected", // Changed to Rejected for example
+    status: "Rejected",
+    rejectionReason: "This is a duplicate request. The bench is already scheduled for repair.",
     reportedAt: "2023-10-23T11:00:00Z",
     priority: "Low",
     citizenName: "Amit Kumar",
@@ -191,6 +191,7 @@ export const sampleIssues: Issue[] = [
     description: "The community in Sector 12 would like to request a new park for children to play in.",
     location: "Sector 12, open plot",
     status: "Rejected",
+    rejectionReason: "New park development is not in the current budget. The request will be considered for the next fiscal year.",
     reportedAt: "2023-10-10T10:00:00Z",
     priority: "Low",
     citizenName: "Meera Iyer",
@@ -198,22 +199,32 @@ export const sampleIssues: Issue[] = [
     category: "New Request",
     imageUrl: "https://picsum.photos/seed/newpark/800/600",
   },
+  {
+    id: "14",
+    citizenId: "CZ-55667",
+    title: "Abandoned Vehicle",
+    description: "An old car has been abandoned on a residential street for over a month.",
+    location: "45 Rosewood Lane",
+    status: "Pending",
+    reportedAt: "2023-10-29T11:00:00Z",
+    priority: "Medium",
+    citizenName: "Sanjay Mehta",
+    issueArea: "Public Nuisance",
+    category: "Vehicles",
+    imageUrl: "https://picsum.photos/seed/abandonedcar/800/600",
+  },
+  {
+    id: "15",
+    citizenId: "CZ-88990",
+    title: "Noise Complaint",
+    description: "Loud construction noise continuing late into the night from the new building site.",
+    location: "Oak Street Construction Site",
+    status: "In Progress",
+    reportedAt: "2023-10-28T23:00:00Z",
+    priority: "High",
+    citizenName: "Aisha Khan",
+    issueArea: "Noise Pollution",
+    category: "Complaint",
+    imageUrl: "https://picsum.photos/seed/noise/800/600",
+  },
 ];
-
-export const handleAcknowledge = (issueId: string) => {
-  console.log(`Issue ${issueId} acknowledged!`);
-  showSuccess(`Issue ${issueId} acknowledged. Status is now 'In Progress'.`);
-  // In a real app, you'd update the issue status in your state/backend
-};
-
-export const handleReject = (issueId: string, reason: string) => {
-  console.log(`Issue ${issueId} rejected. Reason: ${reason}`);
-  showError(`Issue ${issueId} rejected. Reason: "${reason}". A notification has been sent to the citizen.`);
-  // In a real app, you'd update the issue status in your state/backend
-};
-
-export const handleImplement = (issueId: string) => {
-  console.log(`Starting implementation for issue ${issueId}!`);
-  showSuccess(`Implementation started for issue ${issueId}. Status would eventually be 'Resolved'.`);
-  // In a real app, you'd update the issue status in your state/backend
-};

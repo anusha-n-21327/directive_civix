@@ -18,6 +18,7 @@ import AchievementsPage from "./pages/AchievementsPage";
 import CivixHeroesPage from "./pages/CivixHeroesPage";
 import SolvedIssuesPage from "./pages/SolvedIssuesPage";
 import { UserProvider } from "./context/UserContext";
+import { IssuesProvider } from "./context/IssuesContext";
 import Layout from "./components/civix/Layout";
 import IssuesPage from "./pages/IssuesPage";
 import IssueDetailPage from "./pages/IssueDetailPage";
@@ -27,33 +28,35 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <UserProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/profile/edit" element={<EditProfilePage />} />
-              <Route path="/settings/language" element={<LanguageSettingsPage />} />
-              <Route path="/settings/notifications" element={<NotificationSettingsPage />} />
-              <Route path="/settings/password" element={<PasswordSettingsPage />} />
-              <Route path="/settings/help" element={<HelpPage />} />
-              <Route path="/leaderboard" element={<LeaderboardPage />} />
-              <Route path="/reporters" element={<ReportersPage />} />
-              <Route path="/records" element={<RecordsPage />} />
-              <Route path="/issues" element={<IssuesPage />} />
-              <Route path="/achievements" element={<AchievementsPage />} />
-              <Route path="/civix-heroes" element={<CivixHeroesPage />} />
-              <Route path="/solved-issues" element={<SolvedIssuesPage />} />
-            </Route>
-            {/* Standalone route for detail page without the main layout's header/footer */}
-            <Route path="/issue/:id" element={<IssueDetailPage />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <IssuesProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/profile/edit" element={<EditProfilePage />} />
+                <Route path="/settings/language" element={<LanguageSettingsPage />} />
+                <Route path="/settings/notifications" element={<NotificationSettingsPage />} />
+                <Route path="/settings/password" element={<PasswordSettingsPage />} />
+                <Route path="/settings/help" element={<HelpPage />} />
+                <Route path="/leaderboard" element={<LeaderboardPage />} />
+                <Route path="/reporters" element={<ReportersPage />} />
+                <Route path="/records" element={<RecordsPage />} />
+                <Route path="/issues" element={<IssuesPage />} />
+                <Route path="/achievements" element={<AchievementsPage />} />
+                <Route path="/civix-heroes" element={<CivixHeroesPage />} />
+                <Route path="/solved-issues" element={<SolvedIssuesPage />} />
+              </Route>
+              {/* Standalone route for detail page without the main layout's header/footer */}
+              <Route path="/issue/:id" element={<IssueDetailPage />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </IssuesProvider>
     </UserProvider>
   </QueryClientProvider>
 );

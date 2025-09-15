@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { sampleIssues, handleAcknowledge, handleReject, handleImplement, Issue } from "@/data/issues";
+import { Issue } from "@/data/issues";
+import { useIssues } from "@/context/IssuesContext";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MapPin, Clock, User, Tag, AlertTriangle, Check, X, Wrench, CheckCircle, XCircle, Fingerprint } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +25,8 @@ import { Textarea } from "@/components/ui/textarea";
 const IssueDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const issue = sampleIssues.find((i) => i.id === id);
+  const { issues, acknowledgeIssue, rejectIssue, implementIssue } = useIssues();
+  const issue = issues.find((i) => i.id === id);
   const [rejectionReason, setRejectionReason] = useState("");
 
   if (!issue) {
@@ -104,6 +106,15 @@ const IssueDetailPage = () => {
               </Badge>
             </div>
             <Separator />
+            {issue.status === "Rejected" && issue.rejectionReason && (
+              <div className="flex items-start gap-3 p-3 bg-destructive/10 rounded-md border border-destructive/20">
+                <AlertTriangle className="h-5 w-5 text-destructive flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-destructive">Rejection Reason:</p>
+                  <p className="text-sm text-destructive/90">{issue.rejectionReason}</p>
+                </div>
+              </div>
+            )}
             <div className="space-y-3 text-sm">
               <div className="flex items-center gap-3">
                 <User className="h-4 w-4 text-muted-foreground" />
@@ -183,7 +194,7 @@ const IssueDetailPage = () => {
                   <AlertDialogCancel onClick={() => setRejectionReason("")}>Cancel</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={() => {
-                      handleReject(issue.id, rejectionReason);
+                      rejectIssue(issue.id, rejectionReason);
                       setRejectionReason("");
                     }}
                     disabled={!rejectionReason.trim()}
@@ -195,7 +206,7 @@ const IssueDetailPage = () => {
             </AlertDialog>
             <Button
               size="lg"
-              onClick={() => handleAcknowledge(issue.id)}
+              onClick={() => acknowledgeIssue(issue.id)}
               className="flex-1"
             >
               <Check className="mr-2 h-5 w-5" />
@@ -208,7 +219,7 @@ const IssueDetailPage = () => {
           <div className="p-4 bg-card border rounded-lg flex gap-4 items-center justify-center">
             <Button
               size="lg"
-              onClick={() => handleImplement(issue.id)}
+              onClick={() => implementIssue(issue.id)}
               className="flex-1"
             >
               <Wrench className="mr-2 h-5 w-5" />

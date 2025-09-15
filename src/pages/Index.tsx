@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Menu, User, Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { sampleIssues, handleAcknowledge } from "@/data/issues";
+import { useIssues } from "@/context/IssuesContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,10 +17,11 @@ type IssueStatusFilter = "Pending" | "In Progress";
 
 const Index = () => {
   const [statusFilter, setStatusFilter] = useState<IssueStatusFilter>("Pending");
+  const { issues, acknowledgeIssue } = useIssues();
 
   const priorityOrder = { High: 1, Medium: 2, Low: 3 };
 
-  const activeIssues = sampleIssues
+  const activeIssues = issues
     .filter((issue) => issue.status === statusFilter)
     .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
@@ -110,7 +111,7 @@ const Index = () => {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleAcknowledge(issue.id);
+                            acknowledgeIssue(issue.id);
                           }}
                           className="flex-1"
                         >
