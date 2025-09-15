@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Menu, User, Check } from "lucide-react";
+import { MapPin, Clock, Menu, User, Check, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useIssues } from "@/context/IssuesContext";
@@ -11,13 +11,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import RejectIssueDialog from "@/components/civix/RejectIssueDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 type IssueStatusFilter = "Pending" | "In Progress";
 
 const Index = () => {
   const [statusFilter, setStatusFilter] = useState<IssueStatusFilter>("Pending");
-  const { issues, acknowledgeIssue } = useIssues();
+  const { issues, acknowledgeIssue, rejectIssue } = useIssues();
+  const [rejectingIssueId, setRejectingIssueId] = useState<string | null>(null);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const priorityOrder = { High: 1, Medium: 2, Low: 3 };
 
@@ -36,6 +49,19 @@ const Index = () => {
       default:
         return "border-gray-500/50 text-gray-600 bg-gray-500/10";
     }
+  };
+
+  const handleRejectConfirm = () => {
+    if (rejectingIssueId && rejectionReason.trim()) {
+      rejectIssue(rejectingIssueId, rejectionReason);
+      setRejectingIssueId(null);
+      setRejectionReason("");
+    }
+  };
+
+  const handleRejectCancel = () => {
+    setRejectingIssueId(null);
+    setRejectionReason("");
   };
 
   return (
@@ -105,7 +131,19 @@ const Index = () => {
                     </CardContent>
                     {statusFilter === "Pending" && (
                       <CardFooter className="p-4 border-t flex gap-2">
-                        <RejectIssueDialog issueId={issue.id} />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setRejectingIssueId(issue.id);
+                          }}
+                        >
+                          <X className="mr-2 h-4 w-4" />
+                          Reject
+                        </Button>
                         <Button
                           size="sm"
                           onClick={(e) => {
@@ -133,6 +171,37 @@ const Index = () => {
 
         <div className="pb-20 md:pb-0"></div>
       </main>
+
+      <AlertDialog open={!!rejectingIssueId} onOpenChange={handleRejectCancel}>
+        <AlertDialogContent
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure you want to reject this issue?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please provide a reason for rejecting this issue. This reason will be sent to the citizen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="grid gap-2">
+            <Label htmlFor="rejection-reason">Reason</Label>
+            <Textarea
+              id="rejection-reason"
+              placeholder="Type your reason here."
+              value={rejectionReason}
+              onChange={(e) => setRejectionReason(e.target.value)}
+            />
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleRejectCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleRejectConfirm}
+              disabled={!rejectionReason.trim()}
+            >
+              Confirm Reject
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };
