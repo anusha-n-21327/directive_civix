@@ -51,6 +51,33 @@ const sampleHeroes: Hero[] = [
     email: "rohan.m@civix.gov",
     avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=RM",
   },
+  {
+    id: "5",
+    serialNo: 5,
+    name: "Neha Gupta",
+    department: "Parks & Recreation",
+    contact: "+91 98765 43214",
+    email: "neha.g@civix.gov",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=NG",
+  },
+  {
+    id: "6",
+    serialNo: 6,
+    name: "Sameer Joshi",
+    department: "Road Safety",
+    contact: "+91 98765 43215",
+    email: "sameer.j@civix.gov",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=SJ",
+  },
+  {
+    id: "7",
+    serialNo: 7,
+    name: "Aisha Khan",
+    department: "Waste Management",
+    contact: "+91 98765 43216",
+    email: "aisha.k@civix.gov",
+    avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=AK",
+  },
 ];
 
 const CivixHeroesPage = () => {
