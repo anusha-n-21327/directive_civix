@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { isWithinInterval, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
 
 interface Feedback {
   id: string;
@@ -67,38 +68,42 @@ const sampleFeedback: Feedback[] = [
 
 const AchievementsPage = () => {
   const [filters, setFilters] = useState({
-    year: "All",
-    month: "All",
-    area: "All",
+    dateRange: "All", // "Week", "Month", "Year", "All"
     issueType: "All",
+    area: "All",
   });
 
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-
-  const uniqueYears = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => new Date(f.date).getFullYear().toString()))).sort((a, b) => b.localeCompare(a))], []);
-  const uniqueMonths = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => monthNames[new Date(f.date).getMonth()]))).sort((a, b) => monthNames.indexOf(a) - monthNames.indexOf(b))], [monthNames]);
   const uniqueAreas = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.area))).sort()], []);
   const uniqueIssueTypes = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.issueType))).sort()], []);
 
   const filteredFeedback = useMemo(() => {
+    const now = new Date();
     return sampleFeedback
       .filter(f => {
         const date = new Date(f.date);
-        const year = date.getFullYear().toString();
-        const month = monthNames[date.getMonth()];
+        
+        let dateMatch = true;
+        if (filters.dateRange !== "All") {
+            let interval: Interval | undefined;
+            if (filters.dateRange === "Week") {
+                interval = { start: startOfWeek(now, { weekStartsOn: 1 }), end: endOfWeek(now, { weekStartsOn: 1 }) };
+            } else if (filters.dateRange === "Month") {
+                interval = { start: startOfMonth(now), end: endOfMonth(now) };
+            } else if (filters.dateRange === "Year") {
+                interval = { start: startOfYear(now), end: endOfYear(now) };
+            }
+            if (interval) {
+                dateMatch = isWithinInterval(date, interval);
+            }
+        }
 
-        const yearMatch = filters.year === "All" || filters.year === year;
-        const monthMatch = filters.month === "All" || filters.month === month;
         const areaMatch = filters.area === "All" || filters.area === f.area;
         const issueTypeMatch = filters.issueType === "All" || filters.issueType === f.issueType;
 
-        return yearMatch && monthMatch && areaMatch && issueTypeMatch;
+        return dateMatch && areaMatch && issueTypeMatch;
       })
-      .sort((a, b) => b.rating - a.rating);
-  }, [filters, monthNames]);
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [filters]);
 
   const handleFilterChange = (type: keyof typeof filters, value: string) => {
     setFilters(prev => ({ ...prev, [type]: value }));
@@ -106,10 +111,9 @@ const AchievementsPage = () => {
 
   const clearFilters = () => {
     setFilters({
-      year: "All",
-      month: "All",
-      area: "All",
+      dateRange: "All",
       issueType: "All",
+      area: "All",
     });
   };
 
@@ -144,21 +148,20 @@ const AchievementsPage = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Year</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>Date</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                {uniqueYears.map(year => (
-                  <DropdownMenuItem key={year} onSelect={() => handleFilterChange("year", year)}>
-                    {year}
-                  </DropdownMenuItem>
-                ))}
+                <DropdownMenuItem onSelect={() => handleFilterChange("dateRange", "Week")}>This Week</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleFilterChange("dateRange", "Month")}>This Month</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleFilterChange("dateRange", "Year")}>This Year</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleFilterChange("dateRange", "All")}>All Time</DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Month</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>Issue Type</DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                {uniqueMonths.map(month => (
-                  <DropdownMenuItem key={month} onSelect={() => handleFilterChange("month", month)}>
-                    {month}
+                {uniqueIssueTypes.map(type => (
+                  <DropdownMenuItem key={type} onSelect={() => handleFilterChange("issueType", type)}>
+                    {type}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
@@ -169,16 +172,6 @@ const AchievementsPage = () => {
                 {uniqueAreas.map(area => (
                   <DropdownMenuItem key={area} onSelect={() => handleFilterChange("area", area)}>
                     {area}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Issue Type</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                {uniqueIssueTypes.map(type => (
-                  <DropdownMenuItem key={type} onSelect={() => handleFilterChange("issueType", type)}>
-                    {type}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
@@ -196,7 +189,7 @@ const AchievementsPage = () => {
             <span className="text-sm font-semibold">Filters:</span>
             {activeFilters.map(([key, value]) => (
               <Badge key={key} variant="secondary" className="capitalize">
-                {key.replace('issueType', 'Type')}: {value}
+                {key === 'dateRange' ? `Date: This ${value}` : `${key.replace('issueType', 'Type')}: ${value}`}
               </Badge>
             ))}
           </div>
@@ -217,7 +210,7 @@ const AchievementsPage = () => {
                       </div>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">{feedback.date}</span>
+                  <span className="text-sm text-gray-500">{new Date(feedback.date).toLocaleDateString()}</span>
                 </div>
                 <p className="text-gray-700 text-sm">{feedback.comment}</p>
               </CardContent>
