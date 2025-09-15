@@ -23,8 +23,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Issue } from "@/data/issues";
 
-type IssueStatusFilter = "Pending" | "In Progress";
+type IssueStatusFilter = Issue["status"];
 
 const Index = () => {
   const [statusFilter, setStatusFilter] = useState<IssueStatusFilter>("Pending");
@@ -64,6 +65,13 @@ const Index = () => {
     setRejectionReason("");
   };
 
+  const statusLabels: Record<IssueStatusFilter, string> = {
+    "Pending": "Pending Issues",
+    "In Progress": "Acknowledged Issues",
+    "Resolved": "Completed Issues",
+    "Rejected": "Rejected Issues",
+  };
+
   return (
     <>
       <main className="px-6 pb-6 space-y-6 animate-in fade-in duration-500">
@@ -87,13 +95,19 @@ const Index = () => {
               <DropdownMenuItem onClick={() => setStatusFilter("In Progress")}>
                 Acknowledged
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter("Resolved")}>
+                Completed
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter("Rejected")}>
+                Rejected
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </section>
 
         <section className="space-y-4">
           <h2 className="text-2xl font-bold text-foreground">
-            {statusFilter === "Pending" ? "Pending Issues" : "Acknowledged Issues"}
+            {statusLabels[statusFilter]}
           </h2>
           {activeIssues.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
