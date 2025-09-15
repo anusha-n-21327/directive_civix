@@ -70,10 +70,8 @@ const AchievementsPage = () => {
   const [filters, setFilters] = useState({
     dateRange: "All", // "Week", "Month", "Year", "All"
     issueType: "All",
-    area: "All",
   });
 
-  const uniqueAreas = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.area))).sort()], []);
   const uniqueIssueTypes = useMemo(() => ["All", ...Array.from(new Set(sampleFeedback.map(f => f.issueType))).sort()], []);
 
   const filteredFeedback = useMemo(() => {
@@ -97,10 +95,9 @@ const AchievementsPage = () => {
             }
         }
 
-        const areaMatch = filters.area === "All" || filters.area === f.area;
         const issueTypeMatch = filters.issueType === "All" || filters.issueType === f.issueType;
 
-        return dateMatch && areaMatch && issueTypeMatch;
+        return dateMatch && issueTypeMatch;
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [filters]);
@@ -113,7 +110,6 @@ const AchievementsPage = () => {
     setFilters({
       dateRange: "All",
       issueType: "All",
-      area: "All",
     });
   };
 
@@ -162,16 +158,6 @@ const AchievementsPage = () => {
                 {uniqueIssueTypes.map(type => (
                   <DropdownMenuItem key={type} onSelect={() => handleFilterChange("issueType", type)}>
                     {type}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>Area</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                {uniqueAreas.map(area => (
-                  <DropdownMenuItem key={area} onSelect={() => handleFilterChange("area", area)}>
-                    {area}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
